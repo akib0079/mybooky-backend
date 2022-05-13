@@ -2,7 +2,7 @@ const express = require("express")
 const port = process.env.PORT || 5000
 const cors = require('cors')
 require('dotenv').config()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const app = express()
 
@@ -26,6 +26,17 @@ async function runDataBase() {
 
             const allBooks = await cursor.toArray();
             res.send(allBooks);
+        });
+
+        app.get('/books/:id', async (req, res) => {
+            await client.connect();
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+
+            const dName = client.db("MyBookyD_Base").collection("Books");
+            const data = await dName.findOne(query);
+            res.send(data);
+
         })
     }
     finally {
