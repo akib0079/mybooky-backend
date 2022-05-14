@@ -35,22 +35,44 @@ async function runDataBase() {
 
             const dName = client.db("MyBookyD_Base").collection("Books");
             const data = await dName.findOne(query);
-            console.log(data);
+            console.log(req.body);
             res.send(data);
 
         });
 
-        app.put('/book/:id', async (req, res) => {
+        // Update deliver api.
+        app.put('/books/:id', async (req, res) => {
             await client.connect();
             const dName = client.db("MyBookyD_Base").collection("Books");
 
             const id = req.params.id;
-            const quantity = req.body;
+            const qValue = req.body.quantity;
+
             const filter = { _id: ObjectId(id) };
 
             const updateDoc = {
                 $set: {
-                    quantity: quantity - 1
+                    quantity: qValue - 1,
+                },
+            };
+
+            const updateQ = await dName.updateOne(filter, updateDoc);
+            res.send(updateQ);
+        })
+
+        app.patch('/books/:id', async (req, res) => {
+            await client.connect();
+            const dName = client.db("MyBookyD_Base").collection("Books");
+
+            const id = req.params.id;
+            const sValue = parseInt(req.body.stock);
+            const qValue = parseInt(req.body.qNum);
+
+            const filter = { _id: ObjectId(id) };
+
+            const updateDoc = {
+                $set: {
+                    quantity: qValue + sValue,
                 },
             };
 
