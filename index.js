@@ -35,8 +35,27 @@ async function runDataBase() {
 
             const dName = client.db("MyBookyD_Base").collection("Books");
             const data = await dName.findOne(query);
+            console.log(data);
             res.send(data);
 
+        });
+
+        app.put('/book/:id', async (req, res) => {
+            await client.connect();
+            const dName = client.db("MyBookyD_Base").collection("Books");
+
+            const id = req.params.id;
+            const quantity = req.body;
+            const filter = { _id: ObjectId(id) };
+
+            const updateDoc = {
+                $set: {
+                    quantity: quantity - 1
+                },
+            };
+
+            const updateQ = await dName.updateOne(filter, updateDoc);
+            res.send(updateQ);
         })
     }
     finally {
