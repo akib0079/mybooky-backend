@@ -92,6 +92,18 @@ async function runDataBase() {
             const data = await dName.deleteOne(query);
             res.send(data);
         })
+
+        // Inset api
+
+        app.post('books', async (req, res) => {
+            await client.connect();
+            const dName = client.db("MyBookyD_Base").collection("Books");
+
+            const newBook = req.body;
+            const result = await dName.insertOne(newBook);
+            res.send(result);
+
+        })
     }
     finally {
 
