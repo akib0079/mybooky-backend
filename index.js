@@ -104,6 +104,21 @@ async function runDataBase() {
             res.send(result);
 
         })
+
+        // load items
+
+        app.get('/myitem', async (req, res) => {
+            await client.connect();
+            const dName = client.db("MyBookyD_Base").collection("Books");
+
+            const name = req.query.s_name;
+            console.log(name);
+            const query = { supplier_name: name };
+            const cursor = dName.find(query);
+
+            const myBook = await cursor.toArray();
+            res.send(myBook);
+        })
     }
     finally {
 
