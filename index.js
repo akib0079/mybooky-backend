@@ -99,8 +99,11 @@ async function runDataBase() {
             await client.connect();
             const dName = client.db("MyBookyD_Base").collection("Books");
 
-            const newBook = req.body.data;
-            const result = await dName.insertOne(newBook);
+            const newBook = req.body;
+            const doc = {
+                newBook
+            }
+            const result = await dName.insertOne(doc);
             res.send(result);
 
         })
