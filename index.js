@@ -41,6 +41,7 @@ async function runDataBase() {
         });
 
         // Update deliver api.
+
         app.put('/books/:id', async (req, res) => {
             await client.connect();
             const dName = client.db("MyBookyD_Base").collection("Books");
@@ -60,6 +61,8 @@ async function runDataBase() {
             res.send(updateQ);
         })
 
+        // Update stock quantity api.
+
         app.patch('/books/:id', async (req, res) => {
             await client.connect();
             const dName = client.db("MyBookyD_Base").collection("Books");
@@ -78,6 +81,18 @@ async function runDataBase() {
 
             const updateQ = await dName.updateOne(filter, updateDoc);
             res.send(updateQ);
+        })
+
+        // Delete api.
+
+        app.delete('/books/:id', async (req, res) => {
+            await client.connect();
+            const dName = client.db("MyBookyD_Base").collection("Books");
+
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const data = await dName.deleteOne(query);
+            res.send(data);
         })
     }
     finally {
