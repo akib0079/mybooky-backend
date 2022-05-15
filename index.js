@@ -95,7 +95,7 @@ async function runDataBase() {
 
         // Inset api
 
-        app.post('books', async (req, res) => {
+        app.post('/books', async (req, res) => {
             await client.connect();
             const dName = client.db("MyBookyD_Base").collection("Books");
 
